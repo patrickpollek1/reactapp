@@ -1,35 +1,41 @@
-import React  from 'react';
-import Text from './Components/Text'
-import ToDoList from './Components/ToDoList'
-import './App.css';
-import NewEntry from './Components/NewEntry';
+import React, { useState, useMemo } from "react";
+import Text from "./Components/Text";
+import ToDoList from "./Components/ToDoList";
+import "./App.css";
+import NewEntry from "./Components/NewEntry";
 
-class App extends React.Component {
- constructor(props) {
-  super(props);
-  this.state = {testentries: [{ id :1,titel:"Test1",text:"Test"},{ id :2,titel:"Test2",text:"Test"},{ id :3,titel:"Test3",text:"Test"}]};
-}
+function App(props) {
+  const [entries, setEntries] = useState([
+    { id: 1, titel: "Test1", text: "Test" },
+    { id: 2, titel: "Test2", text: "Test" },
+    { id: 3, titel: "Test3", text: "Test" },
+  ]);
 
-  add(titel,id,text) {
-   this.setState(state => (
-     state.testentries.push({titel,text,id})))
-   
- }
- 
-render() {
-  return(
+  const [del, setDel] = useState(0);
+
+  const addTodo = (id, titel, text) => {
+    const newTodos = [...entries, { id, titel, text }];
+    setEntries(newTodos);
+  };
+
+  const removeTodo = (id) => {
+    const newTodos = entries.filter((e) => e.id !== id);
+    setDel(del + 1);
+    setEntries(newTodos);
+  };
+
+  const col = useMemo(() => (del % 2 === 0 ? "red" : "green"), [del]);
+
+  return (
     <div>
-<h1>TodoApp</h1>
-<Text text="ToDo" color="red"></Text>  
-
-<ToDoList entries={this.state.testentries}></ToDoList>
-<Text text="Neu" color="black"></Text> 
-<NewEntry add={this.add}></NewEntry>
-
-</div>
-  )
-  
-}
+      <h1>TodoApp</h1>
+      <Text text="ToDo" color={col}></Text>
+      <Text text={del} color="red"></Text>
+      <ToDoList entries={entries} removeTodo={removeTodo}></ToDoList>
+      <Text text="Neu" color="black"></Text>
+      <NewEntry addTodo={addTodo}></NewEntry>
+    </div>
+  );
 }
 
 export default App;
