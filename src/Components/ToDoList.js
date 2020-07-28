@@ -9,6 +9,7 @@ function ToDoList(props) {
       titel={entry.titel}
       text={entry.text}
       removeTodo={props.removeTodo}
+      doneTodo={props.doneTodo}
     ></Entry>
   ));
 
